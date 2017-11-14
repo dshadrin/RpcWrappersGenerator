@@ -16,8 +16,8 @@ ApiStoragePtr ApiStorageInterface::Create(const StorageParameters& params)
         STG_EXCEPTION_ERROR("Cannot create ApiStorage instance");
     }
     
-    aPtr.get()->Parse();
-    return aPtr;
+    aPtr->Parse();
+    return ApiStoragePtr(aPtr.release());
 }
 
 //////////////////////////////////////////////////////////////////////////
