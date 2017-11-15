@@ -80,11 +80,11 @@ ELSEIF (${PRJ_BUILD_TARGET} STREQUAL "linux")
   SET(Boost_USE_MULTITHREADED ON)
 
   SET (XERCESC_STATIC OFF)
-  FIND_PACKAGE(Xerces REQUIRED)
-  IF (NOT XERCESC_FOUND)
+  FIND_PACKAGE(XercesC REQUIRED)
+  IF (NOT XercesC_FOUND)
     MESSAGE(SEND_ERROR "Failed to find Xerces C++ libraries.")
   ELSE ()
-    INCLUDE_DIRECTORIES(${XERCESC_INCLUDE})
+    INCLUDE_DIRECTORIES(${XercesC_INCLUDE_DIRS})
   ENDIF ()
 
 ################################################################################

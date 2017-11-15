@@ -15,7 +15,7 @@ ENDIF ()
 ADD_LIBRARY( RpcApiStorage SHARED ${RpcApiStorage_INC} ${RpcApiStorage_SRC} )
 
 IF(UNIX)
-  TARGET_LINK_LIBRARIES(RpcApiStorage ${Boost_LIBRARIES} ${XERCESC_LIBRARY})
+  TARGET_LINK_LIBRARIES(RpcApiStorage ${Boost_LIBRARIES} ${XercesC_LIBRARY})
 ELSE()
   TARGET_LINK_LIBRARIES(RpcApiStorage ${Boost_LIBRARIES} xerces-c)
 ENDIF()
