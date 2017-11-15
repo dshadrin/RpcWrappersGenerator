@@ -24,6 +24,7 @@ void RpcGeneratorExecutor::Execute(const std::string& cfgXmlName)
 {
     try
     {
+        // init configuration
         if (!m_config)
         {
             if (!fs::exists(cfgXmlName))
@@ -39,6 +40,7 @@ void RpcGeneratorExecutor::Execute(const std::string& cfgXmlName)
             }
         }
 
+        // init API storage
         if (!m_storage)
         {
             StorageParameters params;
@@ -48,8 +50,6 @@ void RpcGeneratorExecutor::Execute(const std::string& cfgXmlName)
             {
                 STG_EXCEPTION_ERROR(GMSG << "Cannot find API XML file: " << params.apiXmlName);
             }
-
-
 
             m_storage = ApiStorageInterface::Create(params);
         }

@@ -9,7 +9,7 @@
 
 //////////////////////////////////////////////////////////////////////////
 
-#include "RpcApiInterface.h"
+#include "ApiItems.h"
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -19,10 +19,20 @@ public:
     ApiStorage(const StorageParameters& params);
     ~ApiStorage();
 
-    void Parse();
+    // check if node with tag <tag> need to be added
+    bool IsHandleTag(const std::string& tagName) const;
+    // add data from XML node
+    void AddNode(const std::string& tagName, const std::map<std::string, std::string>& attrMap);
+    // parsing and store data
+    void LoadXmlData();
+
+private:
+    EItemTag TagName2TagValue(const std::string& name);
 
 private:
     StorageParameters m_params;
+
+    static const std::vector<std::string> nodeNames;
 };
 
 //////////////////////////////////////////////////////////////////////////

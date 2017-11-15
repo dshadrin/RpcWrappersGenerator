@@ -22,8 +22,12 @@
 #include <stdexcept>
 #include <sstream>
 #include <iostream>
+#include <map>
+#include <vector>
 
-#ifdef _MSC_VER                                                  
+#include <cstdint>
+
+#if ((defined _MSC_VER) && (_MSC_VER >= 1800))
 #include <filesystem>
 namespace fs = std::experimental::filesystem;
 #else
