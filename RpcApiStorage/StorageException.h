@@ -9,10 +9,6 @@
 
 //////////////////////////////////////////////////////////////////////////
 
-#include <strstream>
-
-//////////////////////////////////////////////////////////////////////////
-
 enum EErrorSeverity
 {
     ES_LOGICAL,     // no error
@@ -70,10 +66,13 @@ private:
     EErrorSeverity m_severity;
 };
 
-#define STG_EXCEPTION_ERROR(msg) throw StorageException(msg, ES_ERROR, __FILE__, __LINE__)
-#define STG_EXCEPTION_WARNING(msg) throw StorageException(msg, ES_WARNING, __FILE__, __LINE__)
-#define STG_EXCEPTION_LOGIC(msg) throw StorageException(msg, ES_LOGICAL)
-#define STG_EXCEPTION(msg, sev) throw StorageException(msg, sev, __FILE__, __LINE__)
+void RPCAPI GeneratorPrintStackTrace(std::ostream& stream);
+
+#define STG_EXCEPTION_ERROR(msg) { /*GeneratorPrintStackTrace(std::cerr);*/ throw StorageException(msg, ES_ERROR, __FILE__, __LINE__); }
+#define STG_EXCEPTION_WARNING(msg) { /*GeneratorPrintStackTrace(std::cerr);*/ throw StorageException(msg, ES_WARNING, __FILE__, __LINE__); }
+#define STG_EXCEPTION_LOGIC(msg) { /*GeneratorPrintStackTrace(std::cerr);*/ throw StorageException(msg, ES_LOGICAL); }
+#define STG_EXCEPTION(msg, sev) { /*GeneratorPrintStackTrace(std::cerr);*/ throw StorageException(msg, sev, __FILE__, __LINE__); }
+#define GMSG MessageBuilder()
 
 //////////////////////////////////////////////////////////////////////////
 #endif // __STORAGE_EXCEPTION_H

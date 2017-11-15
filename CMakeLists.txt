@@ -29,7 +29,7 @@ IF (${PRJ_BUILD_TARGET} STREQUAL "msvc")
   
   SET(Boost_USE_STATIC_LIBS ON)
   SET(Boost_USE_MULTITHREADED ON)
-#  INCLUDE_DIRECTORIES(${SolutionDir}/xerces-c-3.1.1/src)
+  INCLUDE_DIRECTORIES(${SolutionDir}/xerces-c-3.1.1/src)
  
 ################################################################################
 ELSEIF (${PRJ_BUILD_TARGET} STREQUAL "mingw")
@@ -79,13 +79,13 @@ ELSEIF (${PRJ_BUILD_TARGET} STREQUAL "linux")
   SET(Boost_USE_STATIC_LIBS ON)
   SET(Boost_USE_MULTITHREADED ON)
 
-#  SET (XERCESC_STATIC OFF)
-#  FIND_PACKAGE(Xerces REQUIRED)
-#  IF (NOT XERCESC_FOUND)
-#    MESSAGE(SEND_ERROR "Failed to find Xerces C++ libraries.")
-#  ELSE ()
-#    INCLUDE_DIRECTORIES(${XERCESC_INCLUDE})  
-#  ENDIF ()
+  SET (XERCESC_STATIC OFF)
+  FIND_PACKAGE(Xerces REQUIRED)
+  IF (NOT XERCESC_FOUND)
+    MESSAGE(SEND_ERROR "Failed to find Xerces C++ libraries.")
+  ELSE ()
+    INCLUDE_DIRECTORIES(${XERCESC_INCLUDE})
+  ENDIF ()
 
 ################################################################################
 ELSE ()
@@ -96,7 +96,14 @@ ENDIF (${PRJ_BUILD_TARGET} STREQUAL "msvc")
 MESSAGE(STATUS "CMAKE_CXX_FLAGS: " ${CMAKE_CXX_FLAGS})
 MESSAGE(STATUS "SolutionDir: " ${RPC_SOURCE_DIR})
 
-FIND_PACKAGE(Boost COMPONENTS system filesystem REQUIRED)
+#LIST ( BOOST_LIB_LIST system )
+
+IF (${PRJ_BUILD_TARGET} STREQUAL "linux" OR ${PRJ_BUILD_TARGET} STREQUAL "mingw")
+  FIND_PACKAGE(Boost COMPONENTS system filesystem REQUIRED)
+ELSE ()
+  FIND_PACKAGE(Boost COMPONENTS system REQUIRED)
+ENDIF ()
+
 IF (NOT Boost_FOUND)
   MESSAGE(SEND_ERROR "Failed to find boost libraries.")
 ELSE ()
@@ -108,7 +115,7 @@ LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 #INCLUDE_DIRECTORIES(${SolutionDir}/include)  
 
 IF (${PRJ_BUILD_TARGET} STREQUAL "msvc")
-#  ADD_SUBDIRECTORY( xerces-c-3.1.1 )
+  ADD_SUBDIRECTORY( xerces-c-3.1.1 )
 ENDIF ()
 
 #ADD_SUBDIRECTORY( jsoncpp )

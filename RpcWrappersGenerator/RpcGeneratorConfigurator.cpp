@@ -7,7 +7,7 @@
 
 #include "RpcWrappersGenerator.h"
 #include "RpcGeneratorConfigurator.h"
-#include "GeneratorException.h"
+#include "RpcApiInterface.h"
 #include <boost/property_tree/xml_parser.hpp>
 
 //////////////////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ std::string RpcGeneratorConfigurator::GetApiXmlName() const
     std::string xmlName = m_pt.get<std::string>(API_XML_NAME_PATH, "");
     if (xmlName.empty())
     {
-        GEN_EXCEPTION_ERROR((MessageBuilder() << "Wrong XML configuration format: " << API_XML_NAME_PATH << " is absent").Str());
+        STG_EXCEPTION_ERROR(GMSG << "Wrong XML configuration format: " << API_XML_NAME_PATH << " is absent");
     }
     return xmlName;
 }

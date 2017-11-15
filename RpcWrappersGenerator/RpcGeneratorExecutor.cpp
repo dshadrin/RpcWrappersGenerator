@@ -7,7 +7,7 @@
 
 #include "RpcWrappersGenerator.h"
 #include "RpcGeneratorExecutor.h"
-#include "GeneratorException.h"
+#include "RpcApiInterface.h"
 
 //////////////////////////////////////////////////////////////////////////
 RpcGeneratorExecutor::RpcGeneratorExecutor()
@@ -28,14 +28,14 @@ void RpcGeneratorExecutor::Execute(const std::string& cfgXmlName)
         {
             if (!fs::exists(cfgXmlName))
             {
-                GEN_EXCEPTION_ERROR((MessageBuilder() << "Cannot find configuration: " << cfgXmlName).Str());
+                STG_EXCEPTION_ERROR(GMSG << "Cannot find configuration: " << cfgXmlName);
             }
 
             m_config.reset(new RpcGeneratorConfigurator(cfgXmlName));
 
             if (!m_config)
             {
-                GEN_EXCEPTION_ERROR((MessageBuilder() << "Error create configuration: " << cfgXmlName).Str());
+                STG_EXCEPTION_ERROR(GMSG << "Error create configuration: " << cfgXmlName);
             }
         }
 
@@ -46,7 +46,7 @@ void RpcGeneratorExecutor::Execute(const std::string& cfgXmlName)
 
             if (!fs::exists(params.apiXmlName))
             {
-                GEN_EXCEPTION_ERROR((MessageBuilder() << "Cannot find API XML file: " << params.apiXmlName).Str());
+                STG_EXCEPTION_ERROR(GMSG << "Cannot find API XML file: " << params.apiXmlName);
             }
 
 
@@ -62,14 +62,17 @@ void RpcGeneratorExecutor::Execute(const std::string& cfgXmlName)
         {
             std::cerr << " | " << e.File() << ":" << e.Line();
         }
-        std::cerr << std::endl;
+        std::cerr << std::endl << std::endl;
+        GeneratorPrintStackTrace(std::cerr);
     }
     catch (std::exception& e)
     {
-        std::cerr << "ERROR: " << e.what() << std::endl;
+        std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
+        GeneratorPrintStackTrace(std::cerr);
     }
     catch (...)
     {
-        std::cerr << "ERROR: Unknown!" << std::endl;
+        std::cerr << "ERROR: Unknown!" << std::endl << std::endl;
+        GeneratorPrintStackTrace(std::cerr);
     }
 }

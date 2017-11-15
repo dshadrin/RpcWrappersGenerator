@@ -3,9 +3,15 @@
 * All rights reserved.
 */
 
-#include "RpcApiStorage.h"
+#include "StdInc.h"
 #include "ApiStorage.h"
-#include "StorageException.h"
+#include <boost/stacktrace.hpp>
+
+//////////////////////////////////////////////////////////////////////////
+void RPCAPI GeneratorPrintStackTrace(std::ostream& stream)
+{
+    stream << boost::stacktrace::stacktrace() << std::endl;
+}
 
 //////////////////////////////////////////////////////////////////////////
 ApiStoragePtr ApiStorageInterface::Create(const StorageParameters& params)
