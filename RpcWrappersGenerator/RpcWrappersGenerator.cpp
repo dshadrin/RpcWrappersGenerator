@@ -21,21 +21,21 @@
 int main(int argc, const char** argv)
 {
     std::cout << VERSION_STR;
-    SOptions so;
+    GOptions so;
     int retCode = -1;
 
     try
     {
         switch (so.ParseOptions(argc, argv))
         {
-        case SOptions::eHelp:
+        case GOptions::eHelp:
             so.PrintUsage();
             break;
-        case SOptions::eGenerate:
+        case GOptions::eGenerate:
             RpcGeneratorExecutorInterface::Create()->Execute(so.ConfigFileName());
             break;
-        case SOptions::eConfigure:
-        case SOptions::eComplete:
+        case GOptions::eConfigure:
+        case GOptions::eComplete:
         default:;
         }
         retCode = 0;
