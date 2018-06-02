@@ -68,11 +68,36 @@ private:
 
 void RPCAPI GeneratorPrintStackTrace(std::ostream& stream);
 
-#define STG_EXCEPTION_ERROR(msg) { /*GeneratorPrintStackTrace(std::cerr);*/ throw StorageException(msg, ES_ERROR, __FILE__, __LINE__); }
-#define STG_EXCEPTION_WARNING(msg) { /*GeneratorPrintStackTrace(std::cerr);*/ throw StorageException(msg, ES_WARNING, __FILE__, __LINE__); }
-#define STG_EXCEPTION_LOGIC(msg) { /*GeneratorPrintStackTrace(std::cerr);*/ throw StorageException(msg, ES_LOGICAL); }
-#define STG_EXCEPTION(msg, sev) { /*GeneratorPrintStackTrace(std::cerr);*/ throw StorageException(msg, sev, __FILE__, __LINE__); }
+#define STG_EXCEPTION(msg, sev)     throw StorageException(msg, sev, __FILE__, __LINE__)
+#define STG_EXCEPTION_ERROR(msg)    STG_EXCEPTION(msg, ES_ERROR)
+#define STG_EXCEPTION_WARNING(msg)  STG_EXCEPTION(msg, ES_WARNING)
+#define STG_EXCEPTION_LOGIC(msg)    throw StorageException(msg, ES_LOGICAL)
 #define GMSG MessageBuilder()
+
+//////////////////////////////////////////////////////////////////////////
+inline void PrintExeptionData()
+{
+    std::cerr << "ERROR: Unknown!" << std::endl << std::endl;
+    GeneratorPrintStackTrace(std::cerr);
+}
+
+inline void PrintExeptionData(const std::exception& e)
+{
+    std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
+    GeneratorPrintStackTrace(std::cerr);
+}
+
+inline void PrintExeptionData(const StorageException& e)
+{
+    // all get exception in this point are errors
+    std::cerr << "ERROR: " << e.what();
+    if (e.File() != nullptr)
+    {
+        std::cerr << " | " << e.File() << ":" << e.Line();
+    }
+    std::cerr << std::endl << std::endl;
+    GeneratorPrintStackTrace(std::cerr);
+}
 
 //////////////////////////////////////////////////////////////////////////
 #endif // __STORAGE_EXCEPTION_H

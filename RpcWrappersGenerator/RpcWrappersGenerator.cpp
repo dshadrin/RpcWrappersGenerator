@@ -28,38 +28,29 @@ int main(int argc, const char** argv)
     {
         switch (so.ParseOptions(argc, argv))
         {
-        case GOptions::eHelp:
+        case GOptions::EGeneratorMode::help:
             so.PrintUsage();
             break;
-        case GOptions::eGenerate:
+        case GOptions::EGeneratorMode::generate:
             RpcGeneratorExecutorInterface::Create()->Execute(so.ConfigFileName());
             break;
-        case GOptions::eConfigure:
-        case GOptions::eComplete:
+        case GOptions::EGeneratorMode::configure:
+        case GOptions::EGeneratorMode::complete:
         default:;
         }
         retCode = 0;
     }
     catch (StorageException& e)
     {
-        // all get exception in this point are errors
-        std::cerr << "ERROR: " << e.what();
-        if (e.File() != nullptr)
-        {
-            std::cerr << " | " << e.File() << ":" << e.Line();
-        }
-        std::cerr << std::endl << std::endl;
-        GeneratorPrintStackTrace(std::cerr);
+        PrintExeptionData(e);
     }
     catch (std::exception& e)
     {
-        std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
-        GeneratorPrintStackTrace(std::cerr);
+        PrintExeptionData(e);
     }
     catch (...)
     {
-        std::cerr << "ERROR: Unknown!" << std::endl << std::endl;
-        GeneratorPrintStackTrace(std::cerr);
+        PrintExeptionData();
     }
 
 
