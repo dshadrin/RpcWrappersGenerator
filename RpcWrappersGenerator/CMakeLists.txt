@@ -1,12 +1,27 @@
-PROJECT( RpcWrappersGenerator )
-SET (ProjectDir ${RpcWrappersGenerator_SOURCE_DIR})
-MESSAGE(STATUS "RpcWrappersGenerator ProjectDir: " ${ProjectDir})
+PROJECT( ipcgen )
+SET (ProjectDir ${ipcgen_SOURCE_DIR})
+MESSAGE(STATUS "ipcgen ProjectDir: " ${ProjectDir})
 
-FILE( GLOB RpcWrappersGenerator_SRC *.c* )
-FILE( GLOB RpcWrappersGenerator_INC *.h* )
 INCLUDE_DIRECTORIES(${SolutionDir}/RpcApiStorage)
 
-ADD_EXECUTABLE( RpcWrappersGenerator ${RpcWrappersGenerator_SRC} ${RpcWrappersGenerator_INC} )
-TARGET_LINK_LIBRARIES(RpcWrappersGenerator RpcApiStorage)
-INSTALL(TARGETS RpcWrappersGenerator RUNTIME DESTINATION ${DestinationDir})
+set(ipcgen_SRC
+	RpcGeneratorConfigurator.cpp
+	RpcGeneratorExecutor.cpp
+	RpcGeneratorExecutorInterface.cpp
+	RpcWrappersGenerator.cpp
+	GeneratorOptions.cpp
+)
+
+set(ipcgen_INC
+	RpcGeneratorConfigurator.h
+	RpcGeneratorExecutor.h
+	RpcGeneratorExecutorInterface.h
+	RpcWrappersGenerator.h
+	GeneratorOptions.h
+)
+
+ADD_EXECUTABLE( ipcgen ${ipcgen_SRC} ${ipcgen_INC} )
+set_target_properties(ipcgen PROPERTIES LINKER_LANGUAGE CXX)
+TARGET_LINK_LIBRARIES(ipcgen RpcApiStorage)
+INSTALL(TARGETS ipcgen RUNTIME DESTINATION ${DestinationDir})
                                    

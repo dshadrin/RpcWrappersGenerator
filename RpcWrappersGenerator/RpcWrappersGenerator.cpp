@@ -7,6 +7,9 @@
 
 #include "RpcWrappersGenerator.h"
 #include "RpcGeneratorExecutorInterface.h"
+#include "GeneratorOptions.h"
+#include "RpcApiInterface.h"
+#include <boost/program_options.hpp>
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -15,25 +18,50 @@
 
 //////////////////////////////////////////////////////////////////////////
 
-int main(int argc, char** argv)
+int main(int argc, const char** argv)
 {
     std::cout << VERSION_STR;
-
+    SOptions so;
     int retCode = -1;
 
-    if (argc > 1)
+    try
     {
-        if (std::string(argv[1]) == "generator-config.xml")
+        switch (so.ParseOptions(argc, argv))
         {
-            RpcGeneratorExecutorPtr gen = RpcGeneratorExecutorInterface::Create();
-            gen->Execute(argv[1]);
+        case SOptions::eHelp:
+            so.PrintUsage();
+            break;
+        case SOptions::eGenerate:
+            RpcGeneratorExecutorInterface::Create()->Execute(so.ConfigFileName());
+            break;
+        case SOptions::eConfigure:
+        case SOptions::eComplete:
+        default:;
         }
+        retCode = 0;
     }
-    else
+    catch (StorageException& e)
     {
-        std::cout << "Empty command line" << std::endl;
+        // all get exception in this point are errors
+        std::cerr << "ERROR: " << e.what();
+        if (e.File() != nullptr)
+        {
+            std::cerr << " | " << e.File() << ":" << e.Line();
+        }
+        std::cerr << std::endl << std::endl;
+        GeneratorPrintStackTrace(std::cerr);
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "ERROR: " << e.what() << std::endl << std::endl;
+        GeneratorPrintStackTrace(std::cerr);
+    }
+    catch (...)
+    {
+        std::cerr << "ERROR: Unknown!" << std::endl << std::endl;
+        GeneratorPrintStackTrace(std::cerr);
     }
 
-    return 0;
-}
 
+    return retCode;
+}
