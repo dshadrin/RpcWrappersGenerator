@@ -12,6 +12,7 @@
 
 # Build results
 build/
+cmake-build-*/
 bin/
 install/
 [Dd]ebug/
