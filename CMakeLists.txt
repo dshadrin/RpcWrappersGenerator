@@ -102,11 +102,13 @@ MESSAGE(STATUS "SolutionDir: " ${RPC_SOURCE_DIR})
 
 #LIST ( BOOST_LIB_LIST system )
 
-IF (UNIX OR MINGW)
+IF(UNIX)
   FIND_PACKAGE(Boost COMPONENTS system filesystem REQUIRED)
-ELSE ()
+ELSEIF(MINGW)
+  FIND_PACKAGE(Boost COMPONENTS system filesystem stacktrace_windbg REQUIRED)
+ELSE()
   FIND_PACKAGE(Boost COMPONENTS system REQUIRED)
-ENDIF ()
+ENDIF()
 
 IF (NOT Boost_FOUND)
   MESSAGE(SEND_ERROR "Failed to find boost libraries.")
