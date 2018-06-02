@@ -15,6 +15,13 @@
 #include <windows.h>
 #endif // _MSC_VER
 
+#ifdef MINGW
+#ifndef __STRICT_ANSI__
+#define __STRICT_ANSI__
+#endif
+
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 
 #include <string>
