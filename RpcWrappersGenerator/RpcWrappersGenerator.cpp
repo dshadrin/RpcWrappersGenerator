@@ -53,6 +53,5 @@ int main(int argc, const char** argv)
         PrintExeptionData();
     }
 
-
     return retCode;
 }
