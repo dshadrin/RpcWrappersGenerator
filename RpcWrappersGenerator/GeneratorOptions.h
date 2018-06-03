@@ -26,6 +26,12 @@ public:
     const std::string& ConfigFileName() const { return configName; }
 
 private:
+    void VerifyParameters();
+    void CheckConfigureFileExists();
+    void CheckConfigureTemplateExists();
+    void CheckINIfilesExists();
+
+private:
     EGeneratorMode mode;
     fs::path outFolder;
     fs::path configTemplate;

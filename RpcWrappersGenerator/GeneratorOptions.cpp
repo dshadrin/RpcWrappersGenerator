@@ -8,6 +8,8 @@
 #include "GeneratorOptions.h"
 #include "RpcApiInterface.h"
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
+#include <cassert>
 
 //////////////////////////////////////////////////////////////////////////
 namespace po = boost::program_options;
@@ -179,7 +181,83 @@ GOptions::EGeneratorMode GOptions::ParseOptions(int ac, const char** av)
         STG_EXCEPTION_ERROR("No INI files are defined.");
     }
 
+    VerifyParameters();
+
     return mode;
+}
+
+//////////////////////////////////////////////////////////////////////////
+void GOptions::VerifyParameters()
+{
+    switch (mode)
+    {
+    case EGeneratorMode::help:
+        break;
+    case EGeneratorMode::generate:
+        CheckConfigureFileExists();
+        break;
+    case EGeneratorMode::complete:
+    case EGeneratorMode::configure:
+        CheckConfigureTemplateExists();
+        CheckINIfilesExists();
+        break;
+    default:
+        STG_EXCEPTION_ERROR("unexpected mode");
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+void GOptions::CheckConfigureFileExists()
+{
+    fs::path cfg(configName);
+    if (!fs::exists(cfg))
+    {
+        cfg = outFolder / cfg;
+        if (fs::exists(cfg))
+        {
+            configName = cfg.string();
+            boost::algorithm::replace_all(configName, "\\", "/");
+        }
+        else
+        {
+            STG_EXCEPTION_ERROR(GMSG << "Configure file \"" << configName << "\" was not found");
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+void GOptions::CheckConfigureTemplateExists()
+{
+    if (fs::exists(configTemplate))
+    {
+        if (!configTemplate.is_absolute())
+        {
+            configTemplate = fs::absolute(configTemplate);
+        }
+    }
+    else
+    {
+        STG_EXCEPTION_ERROR(GMSG << "Configure template file \"" << configTemplate << "\" was not found");
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+void GOptions::CheckINIfilesExists()
+{
+    for (fs::path& ini : iniList)
+    {
+        if (fs::exists(ini))
+        {
+            if (!ini.is_absolute())
+            {
+                ini = fs::absolute(ini);
+            }
+        }
+        else
+        {
+            STG_EXCEPTION_ERROR(GMSG << "INI file \"" << ini << "\" was not found");
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////
