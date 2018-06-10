@@ -12,7 +12,7 @@ IF (UNIX)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -std=c++11 -fpermissive -Wno-deprecated")
 ENDIF ()
 
-ADD_LIBRARY( RpcApiStorage SHARED ${RpcApiStorage_INC} ${RpcApiStorage_SRC} )
+ADD_LIBRARY( RpcApiStorage STATIC ${RpcApiStorage_INC} ${RpcApiStorage_SRC} )
 
 IF(UNIX)
   TARGET_LINK_LIBRARIES(RpcApiStorage ${Boost_LIBRARIES} dl ${XercesC_LIBRARY})
