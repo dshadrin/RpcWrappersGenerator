@@ -147,7 +147,7 @@ GOptions::EGeneratorMode GOptions::ParseOptions(int ac, const char** av)
         {
             if (mode == EGeneratorMode::configure || mode == EGeneratorMode::complete)
             {
-                configTemplate.assign(vm["inxml"].as<fs::path>());
+                configTemplate = vm["inxml"].as<fs::path>();
             }
         }
 
@@ -155,7 +155,7 @@ GOptions::EGeneratorMode GOptions::ParseOptions(int ac, const char** av)
         {
             if (mode == EGeneratorMode::configure || mode == EGeneratorMode::complete)
             {
-                outFolder.assign(vm["outdir"].as<fs::path>());
+                outFolder = vm["outdir"].as<fs::path>();
             }
         }
 
