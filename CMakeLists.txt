@@ -53,14 +53,15 @@ ELSEIF (MINGW)
 ELSEIF (UNIX)
 
   ADD_DEFINITIONS(-DLINUX)
-
+  ADD_DEFINITIONS(-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED)
+  
   IF (${CMAKE_BUILD_TYPE} STREQUAL "Debug")
     ADD_DEFINITIONS(-D_DEBUG)
   ELSE ()
     ADD_DEFINITIONS(-DNDEBUG)
   ENDIF ()
 
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -std=c++11 -fpermissive")
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -std=c++14 -fpermissive")
   SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 
   # use, i.e. don't skip the full RPATH for the build tree
@@ -80,7 +81,7 @@ ELSEIF (UNIX)
   # which point to directories outside the build tree to the install RPATH
   SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-  SET(Boost_USE_STATIC_LIBS ON)
+  SET(Boost_USE_STATIC_LIBS OFF)
   SET(Boost_USE_MULTITHREADED ON)
 
   SET (XERCESC_STATIC OFF)
